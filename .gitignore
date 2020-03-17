@@ -1,3 +1,6 @@
 venv
 .idea
 .venv
+app/__pycache__
+app/db/config.py
+app/db/__pycache__
