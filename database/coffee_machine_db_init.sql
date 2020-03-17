@@ -40,9 +40,3 @@ date DATETIME,
    FOREIGN KEY(receipt_id) 
        REFERENCES receipt(id)
 );
-
-SHOW TABLES;
-DESCRIBE receipt;
-DESCRIBE machine;
-DESCRIBE machine_receipt;
-DESCRIBE history;
