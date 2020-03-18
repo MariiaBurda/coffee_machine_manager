@@ -4,46 +4,71 @@ from config import config
 
 
 def get_all_history(machine_id):
-    db = mysql.connector.Connect(**config)
-    cursor = db.cursor()
+    try:
+        db = mysql.connector.Connect(**config)
+        cursor = db.cursor()
 
-    sql = "SELECT r.name, h.date FROM history AS h " \
-          "INNER JOIN receipt AS r " \
-          "ON h.receipt_id = r.id " \
-          "WHERE machine_id = %s " \
-          "ORDER BY date DESC"
-    data = (machine_id,)
-    cursor.execute(sql, data)
-    rows = cursor.fetchall()
+        sql = "SELECT r.name, h.date FROM history AS h " \
+              "INNER JOIN receipt AS r " \
+              "ON h.receipt_id = r.id " \
+              "WHERE machine_id = %s " \
+              "ORDER BY date DESC"
+        data = (machine_id,)
+        cursor.execute(sql, data)
+        rows = cursor.fetchall()
 
-    return rows
+        return rows
+
+    except mysql.connector.Error as err:
+        print("Something went wrong: {}".format(err))
+
+    finally:
+        cursor.close()
+        db.close()
 
 
 def get_last_orders(machine_id, limit):
-    db = mysql.connector.Connect(**config)
-    cursor = db.cursor()
+    try:
+        db = mysql.connector.Connect(**config)
+        cursor = db.cursor()
 
-    sql = "SELECT r.name, h.date FROM history AS h " \
-          "INNER JOIN receipt AS r " \
-          "ON h.receipt_id = r.id " \
-          "WHERE machine_id = %s " \
-          "ORDER BY date DESC " \
-          "LIMIT %s"
+        sql = "SELECT r.name, h.date FROM history AS h " \
+              "INNER JOIN receipt AS r " \
+              "ON h.receipt_id = r.id " \
+              "WHERE machine_id = %s " \
+              "ORDER BY date DESC " \
+              "LIMIT %s"
 
-    data = (machine_id, limit)
-    cursor.execute(sql, data)
-    rows = cursor.fetchall()
+        data = (machine_id, limit)
+        cursor.execute(sql, data)
+        rows = cursor.fetchall()
 
-    return rows
+        return rows
+
+    except mysql.connector.Error as err:
+        print("Something went wrong: {}".format(err))
+
+    finally:
+        cursor.close()
+        db.close()
 
 
 def add_order_to_history(machine_id, receipt_id):
-    db = mysql.connector.Connect(**config)
-    cursor = db.cursor()
+    try:
+        db = mysql.connector.Connect(**config)
+        cursor = db.cursor()
 
-    sql = "INSERT INTO history(machine_id, receipt_id, date) " \
-          "VALUES(%s, %s, NOW())"
-    data = (machine_id, receipt_id)
-    cursor.execute(sql, data)
+        sql = "INSERT INTO history(machine_id, receipt_id, date) " \
+              "VALUES(%s, %s, NOW())"
+        data = (machine_id, receipt_id)
+        cursor.execute(sql, data)
 
-    db.commit()
+        db.commit()
+
+    except mysql.connector.Error as err:
+        print("Something went wrong: {}".format(err))
+
+    finally:
+        cursor.close()
+        db.close()
+
