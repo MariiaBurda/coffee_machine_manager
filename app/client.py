@@ -1,11 +1,7 @@
 import socketio
+import os
 
 sio = socketio.Client()
-
-
-@sio.event
-def connect():
-    print('connection established')
 
 
 @sio.event
@@ -15,45 +11,75 @@ def make_coffee_for_client(data):
     else:
         print("Not enough resources. Please fill resources")
 
+    print_back()
+    process_back()
+
 
 @sio.event
 def show_receipts_list(data):
     for item in data:
-        print(item)
+        print(item[0], '. ', item[1])
+
+    receipt_id = int(input())
+    sio.emit('make_coffee_for_client', receipt_id)
 
 
 @sio.event
 def show_history(data):
+    # cls()
+
     for item in data:
-        print(item)
+        print(item[0], ': ', item[1])
+
+    print_back()
+    process_back()
 
 
 @sio.event
 def fill_resources_to_client(data):
     print(data)
+    print_back()
+    process_back()
 
 
 @sio.event
 def disconnect():
-    print('disconnected from server')
+    pass
 
 
-sio.connect('http://localhost:5000')
+@sio.event
+def connect():
+    pass
 
-while True:
+
+def cls():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+
+def print_menu():
     print("Choose what you want (enter a number)")
     print("1. Make coffee")
     print("2. Show history")
     print("3. Fill resources")
     print("4. Exit")
 
+
+def print_back():
+    print("Enter any button to go back")
+
+
+def process_back():
+    str(input())
+    print_menu()
+    process_command()
+
+
+def process_command():
     cmd = str(input())
 
     if cmd == "1":
         print("Choose which coffee you want (enter a number)")
         sio.emit('show_receipts_list')
-        receipt_id = int(input())
-        sio.emit('make_coffee_for_client', receipt_id)
     elif cmd == "2":
         sio.emit('show_history')
     elif cmd == "3":
@@ -61,6 +87,12 @@ while True:
     elif cmd == "4":
         sio.disconnect()
         print("have a nice day")
-        break
     else:
         print("Unknown command. Please enter again")
+        process_command()
+
+
+sio.connect('http://localhost:5000')
+
+print_menu()
+process_command()

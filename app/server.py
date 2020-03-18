@@ -29,7 +29,7 @@ def make_coffee_for_client(sid, receipt_id):
 
 
 @sio.event
-def show_receipts_list(data):
+def show_receipts_list(sid):
     print('start execution of show_receipts_list')
     receipts_list = get_receipts_list()
     print('getting receipts_list, length: %s' % len(receipts_list))
