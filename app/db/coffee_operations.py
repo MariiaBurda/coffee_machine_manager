@@ -1,7 +1,7 @@
 import mysql.connector
 
 from config import config
-from history_operations import get_all_history, get_last_orders
+from history_operations import get_all_history, get_last_orders, add_order_to_history
 from machine_operations import fill_resources, get_current_state, change_current_state
 from receipt_operations import get_receipt_info
 
@@ -19,6 +19,7 @@ def make_coffee(machine_id, receipt_id):
             change_current_state(machine_id, receipt_water_ml, receipt_milk_ml, receipt_coffee_gr)
             print("Your coffee is ready")
             coffee_is_ready = True
+            add_order_to_history(machine_id, receipt_id)
         else:
             print("Not enough resources. Please fill resources")
             fill_resources(machine_id)
