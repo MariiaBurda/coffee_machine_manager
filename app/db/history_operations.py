@@ -36,3 +36,14 @@ def get_last_orders(machine_id, limit):
 
     return rows
 
+
+def add_order_to_history(machine_id, receipt_id):
+    db = mysql.connector.Connect(**config)
+    cursor = db.cursor()
+
+    sql = "INSERT INTO history(machine_id, receipt_id, date) " \
+          "VALUES(%s, %s, NOW())"
+    data = (machine_id, receipt_id)
+    cursor.execute(sql, data)
+
+    db.commit()
