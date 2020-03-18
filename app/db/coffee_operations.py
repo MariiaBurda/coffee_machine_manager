@@ -12,22 +12,14 @@ def make_coffee(machine_id, receipt_id):
         current_water_ml, current_milk_ml, current_coffee_gr = current_resources_value(machine_id)
         receipt_water_ml, receipt_milk_ml, receipt_coffee_gr = receipt_resources_value(machine_id, receipt_id)
 
-        coffee_is_ready = False
-
-        while not coffee_is_ready:
-            if current_water_ml >= receipt_water_ml \
-                    and current_milk_ml >= receipt_milk_ml \
-                    and current_coffee_gr >= receipt_coffee_gr:
-                change_current_state(machine_id, receipt_water_ml, receipt_milk_ml, receipt_coffee_gr)
-                print("Your coffee is ready")
-                coffee_is_ready = True
-                add_order_to_history(machine_id, receipt_id)
-            else:
-                print("Not enough resources. Please fill resources")
-                fill_resources(machine_id)
-                current_water_ml, current_milk_ml, current_coffee_gr = current_resources_value(machine_id)
-                continue
-
+        if current_water_ml >= receipt_water_ml \
+                and current_milk_ml >= receipt_milk_ml \
+                and current_coffee_gr >= receipt_coffee_gr:
+            change_current_state(machine_id, receipt_water_ml, receipt_milk_ml, receipt_coffee_gr)
+            add_order_to_history(machine_id, receipt_id)
+            return True
+        else:
+            return False
     except:
         print('Error: {}. {}, line: {}'.format(sys.exc_info()[0],
                                                sys.exc_info()[1],
