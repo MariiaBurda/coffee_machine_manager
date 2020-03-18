@@ -1,6 +1,6 @@
 import mysql.connector
 
-from config import config
+from .config import config
 
 
 def get_receipt_info(machine_id, receipt_id):

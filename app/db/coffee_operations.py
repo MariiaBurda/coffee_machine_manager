@@ -1,10 +1,10 @@
 import mysql.connector
 import sys
 
-from config import config
-from history_operations import get_all_history, get_last_orders, add_order_to_history
-from machine_operations import fill_resources, get_current_state, change_current_state
-from receipt_operations import get_receipt_info
+from .config import config
+from .history_operations import get_all_history, get_last_orders, add_order_to_history
+from .machine_operations import fill_resources, get_current_state, change_current_state
+from .receipt_operations import get_receipt_info
 
 
 def make_coffee(machine_id, receipt_id):

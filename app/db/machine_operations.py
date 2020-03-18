@@ -1,6 +1,6 @@
 import mysql.connector
 
-from config import config
+from .config import config
 
 
 def fill_resources(machine_id):
