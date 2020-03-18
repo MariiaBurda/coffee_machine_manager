@@ -25,3 +25,24 @@ def get_receipt_info(machine_id, receipt_id):
     finally:
         cursor.close()
         db.close()
+
+
+def get_receipts_list():
+    try:
+        db = mysql.connector.Connect(**config)
+        cursor = db.cursor()
+
+        sql = "SELECT id, name " \
+              "FROM receipt"
+        cursor.execute(sql,)
+        rows = cursor.fetchall()
+
+        return rows
+
+    except mysql.connector.Error as err:
+        print("Something went wrong: {}".format(err))
+
+    finally:
+        cursor.close()
+        db.close()
+
