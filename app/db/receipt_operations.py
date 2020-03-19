@@ -45,4 +45,3 @@ def get_receipts_list():
     finally:
         cursor.close()
         db.close()
-
