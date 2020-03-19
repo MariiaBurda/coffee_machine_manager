@@ -1,5 +1,5 @@
 # Coffee_machine_manager
-Simulation of a remote coffee machine management by WebSockets
+Simulation of a remote coffee machine management by python-socketio
 ### Coffee_machine_manager_db_diagram
 
 
