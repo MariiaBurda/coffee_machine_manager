@@ -18,7 +18,7 @@ def make_coffee_for_client(data):
 @sio.event
 def show_receipts_list(data):
     for item in data:
-        print(item[0], '. ', item[1])
+        print(str(item[0]) + '. ' + str(item[1]))
 
     receipt_id = int(input())
     sio.emit('make_coffee_for_client', receipt_id)
@@ -26,8 +26,6 @@ def show_receipts_list(data):
 
 @sio.event
 def show_history(data):
-    # cls()
-
     for item in data:
         print(item[0], ': ', item[1])
 
@@ -57,6 +55,7 @@ def cls():
 
 
 def print_menu():
+    cls()
     print("Choose what you want (enter a number)")
     print("1. Make coffee")
     print("2. Show history")
@@ -65,7 +64,7 @@ def print_menu():
 
 
 def print_back():
-    print("Enter any button to go back")
+    print("\nEnter any button to go back")
 
 
 def process_back():
@@ -78,11 +77,14 @@ def process_command():
     cmd = str(input())
 
     if cmd == "1":
+        cls()
         print("Choose which coffee you want (enter a number)")
         sio.emit('show_receipts_list')
     elif cmd == "2":
+        cls()
         sio.emit('show_history')
     elif cmd == "3":
+        cls()
         sio.emit('fill_resources_to_client')
     elif cmd == "4":
         sio.disconnect()
