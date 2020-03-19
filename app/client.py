@@ -94,7 +94,8 @@ def process_command():
         process_command()
 
 
-sio.connect('http://localhost:5000')
+if __name__ == '__main__':
+    sio.connect('http://localhost:5000')
 
-print_menu()
-process_command()
+    print_menu()
+    process_command()
