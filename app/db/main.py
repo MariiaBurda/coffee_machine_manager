@@ -24,4 +24,3 @@ def main(db_config):
 if __name__ == '__main__':
     out = main(config)
     print('\n'.join(out))
-

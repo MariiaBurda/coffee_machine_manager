@@ -3,8 +3,8 @@ import socketio
 
 from app.db.history_operations import get_last_orders, get_statistic_of_used_resources
 from app.db.machine_operations import fill_resources
-from app.db.coffee_operations import make_coffee, current_resources_value, receipt_resources_value
-from app.db.receipt_operations import get_receipt_info, get_receipts_list
+from app.db.coffee_operations import make_coffee
+from app.db.receipt_operations import get_receipts_list
 
 machine_id = 1
 
