@@ -1,4 +1,5 @@
 import mysql.connector
+import sys
 
 from .config import config
 
@@ -45,3 +46,19 @@ def get_receipts_list():
     finally:
         cursor.close()
         db.close()
+
+
+def get_receipt_resources_value(machine_id, receipt_id):
+    try:
+        receipt = get_receipt_info(machine_id, receipt_id)
+        print(receipt)
+        receipt_water_ml = receipt[3]
+        receipt_milk_ml = receipt[4]
+        receipt_coffee_gr = receipt[5]
+
+        return receipt_water_ml, receipt_milk_ml, receipt_coffee_gr
+
+    except:
+        print('Error: {}. {}, line: {}'.format(sys.exc_info()[0],
+                                               sys.exc_info()[1],
+                                               sys.exc_info()[2].tb_lineno))
