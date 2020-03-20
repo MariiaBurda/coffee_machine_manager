@@ -1,7 +1,7 @@
 import eventlet
 import socketio
 
-from app.db.history_operations import get_last_orders
+from app.db.history_operations import get_last_orders, get_statistic_of_used_resources
 from app.db.machine_operations import fill_resources
 from app.db.coffee_operations import make_coffee, current_resources_value, receipt_resources_value
 from app.db.receipt_operations import get_receipt_info, get_receipts_list
@@ -45,6 +45,15 @@ def show_history(sid):
     mapped_orders = list(map(lambda x: (x[0], x[1].strftime("%m/%d/%Y, %H:%M:%S")), last_orders))
     sio.emit('show_history', mapped_orders)
     print('end execution of show_history')
+
+
+@sio.event
+def show_statistic_of_the_amount_of_coffee_drunk(sid):
+    print('start execution of show_statistic_of_the_amount_of_coffee_drunk')
+    list_of_the_amount_of_coffee_drunk = get_statistic_of_used_resources(machine_id)
+    print('getting list_of_the_amount_of_coffee_drunk')
+    sio.emit('show_statistic_of_the_amount_of_coffee_drunk', list_of_the_amount_of_coffee_drunk)
+    print('end execution of show_statistic_of_the_amount_of_coffee_drunk')
 
 
 @sio.event

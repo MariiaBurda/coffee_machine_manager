@@ -72,3 +72,28 @@ def add_order_to_history(machine_id, receipt_id):
         cursor.close()
         db.close()
 
+
+def get_statistic_of_used_resources(machine_id):
+    try:
+        db = mysql.connector.Connect(**config)
+        cursor = db.cursor()
+
+        sql = "SELECT r.name, COUNT(h.id) AS number_of_orders " \
+              "FROM receipt AS r " \
+              "INNER JOIN history AS h " \
+              "ON r.id = h.receipt_id " \
+              "WHERE h.machine_id = %s " \
+              "GROUP BY h.receipt_id "
+
+        data = (machine_id,)
+        cursor.execute(sql, data)
+        rows = cursor.fetchall()
+
+        return rows
+
+    except mysql.connector.Error as err:
+        print("Something went wrong: {}".format(err))
+
+    finally:
+        cursor.close()
+        db.close()

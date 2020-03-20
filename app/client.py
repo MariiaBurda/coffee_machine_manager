@@ -27,7 +27,16 @@ def show_receipts_list(data):
 @sio.event
 def show_history(data):
     for item in data:
-        print(item[0], ': ', item[1])
+        print(item[0], ':', item[1])
+
+    print_back()
+    process_back()
+
+
+@sio.event
+def show_statistic_of_the_amount_of_coffee_drunk(data):
+    for item in data:
+        print(item[0], '-', item[1], 'orders')
 
     print_back()
     process_back()
@@ -56,11 +65,12 @@ def cls():
 
 def print_menu():
     cls()
-    print("Choose what you want (enter a number)")
-    print("1. Make coffee")
-    print("2. Show history")
-    print("3. Fill resources")
-    print("4. Exit")
+    print("Choose what you want (enter a number)\n"
+          "1. Make coffee\n"
+          "2. Show history\n"
+          "3. Show statistic of the amount of coffee drunk\n"
+          "4. Fill resources\n"
+          "5. Exit")
 
 
 def print_back():
@@ -85,8 +95,11 @@ def process_command():
         sio.emit('show_history')
     elif cmd == "3":
         cls()
-        sio.emit('fill_resources_to_client')
+        sio.emit('show_statistic_of_the_amount_of_coffee_drunk')
     elif cmd == "4":
+        cls()
+        sio.emit('fill_resources_to_client')
+    elif cmd == "5":
         sio.disconnect()
         print("have a nice day")
     else:
