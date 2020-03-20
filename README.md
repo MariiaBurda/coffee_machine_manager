@@ -1,5 +1,6 @@
 # Coffee_machine_manager
 Simulation of a remote coffee machine management by python-socketio
+Used Python 3.7.5
 ### Coffee_machine_manager_db_diagram
 
 
