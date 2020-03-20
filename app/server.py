@@ -2,7 +2,7 @@ import eventlet
 import socketio
 
 from app.db.history_operations import get_last_orders, get_statistic_of_used_resources
-from app.db.machine_operations import fill_resources
+from app.db.machine_operations import fill_resources, get_current_value_of_all_resources
 from app.db.coffee_operations import make_coffee
 from app.db.receipt_operations import get_receipts_list
 
@@ -54,6 +54,15 @@ def show_statistic_of_the_amount_of_coffee_drunk(sid):
     print('getting list_of_the_amount_of_coffee_drunk')
     sio.emit('show_statistic_of_the_amount_of_coffee_drunk', list_of_the_amount_of_coffee_drunk)
     print('end execution of show_statistic_of_the_amount_of_coffee_drunk')
+
+
+@sio.event
+def show_current_resources_value(sid):
+    print('start execution of show_current_resources_value')
+    list_of_current_value_of_all_resources = list(get_current_value_of_all_resources(machine_id))
+    print('getting list_of_current_value_of_all_resources')
+    sio.emit('show_current_resources_value', list_of_current_value_of_all_resources)
+    print('end execution of show_current_resources_value')
 
 
 @sio.event

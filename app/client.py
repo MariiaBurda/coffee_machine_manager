@@ -43,6 +43,20 @@ def show_statistic_of_the_amount_of_coffee_drunk(data):
 
 
 @sio.event
+def show_current_resources_value(data):
+    current_water_ml = data[2]
+    current_milk_ml = data[3]
+    current_coffee_gr = data[4]
+    print(f"Current resources value:\n\n"
+          f"Water - {current_water_ml} ml\n"
+          f"Milk - {current_milk_ml} ml\n"
+          f"Coffee - {current_coffee_gr} gr")
+
+    print_back()
+    process_back()
+
+
+@sio.event
 def fill_resources_to_client(data):
     print(data)
     print_back()
@@ -69,8 +83,9 @@ def print_menu():
           "1. Make coffee\n"
           "2. Show history\n"
           "3. Show statistic of the amount of coffee drunk\n"
-          "4. Fill resources\n"
-          "5. Exit")
+          "4. Show current resources value\n"
+          "5. Fill resources\n"
+          "6. Exit")
 
 
 def print_back():
@@ -98,8 +113,11 @@ def process_command():
         sio.emit('show_statistic_of_the_amount_of_coffee_drunk')
     elif cmd == "4":
         cls()
-        sio.emit('fill_resources_to_client')
+        sio.emit('show_current_resources_value')
     elif cmd == "5":
+        cls()
+        sio.emit('fill_resources_to_client')
+    elif cmd == "6":
         sio.disconnect()
         print("have a nice day")
     else:
