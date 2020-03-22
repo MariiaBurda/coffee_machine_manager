@@ -10,7 +10,7 @@ Simulation of a remote coffee machine management by python-socketio. Used Python
 2. Use coffee_machine_manager/database/coffee_machine_db_init.sql to create database and tables
 3. Use coffee_machine_manager/database/coffee_machine_db_seed.sql to populate tables
 4. Create coffee_machine_manager/app/db/config.py file and fill with your information:
-config = {
+config_for_db = {
     'host': 'your_host_name',
     'port': your_port_name,
     'database': 'coffee_machine_manager',
