@@ -1,12 +1,12 @@
 import mysql.connector
 import sys
 
-from .config import config
+from .config import config_for_db
 
 
 def fill_resources(machine_id):
     try:
-        db = mysql.connector.Connect(**config)
+        db = mysql.connector.Connect(**config_for_db)
         cursor = db.cursor()
 
         sql = "UPDATE machine " \
@@ -29,7 +29,7 @@ def fill_resources(machine_id):
 
 def get_current_value_of_all_resources(machine_id):
     try:
-        db = mysql.connector.Connect(**config)
+        db = mysql.connector.Connect(**config_for_db)
         cursor = db.cursor()
 
         sql = "SELECT id, name, current_water_ml, current_milk_ml, current_coffee_gr " \
@@ -66,7 +66,7 @@ def pull_out_current_value_of_each_resource(machine_id):
 
 def change_current_value_of_used_resources(machine_id, water_ml, milk_ml, coffee_gr):
     try:
-        db = mysql.connector.Connect(**config)
+        db = mysql.connector.Connect(**config_for_db)
         cursor = db.cursor()
 
         sql = "UPDATE machine " \

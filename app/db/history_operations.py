@@ -1,11 +1,12 @@
 import mysql.connector
+from contextlib import closing
 
-from .config import config
+from .config import config_for_db
 
 
 def get_all_history(machine_id):
     try:
-        db = mysql.connector.Connect(**config)
+        db = mysql.connector.Connect(**config_for_db)
         cursor = db.cursor()
 
         sql = "SELECT r.name, h.date FROM history AS h " \
@@ -29,7 +30,7 @@ def get_all_history(machine_id):
 
 def get_last_orders(machine_id, limit):
     try:
-        db = mysql.connector.Connect(**config)
+        db = mysql.connector.Connect(**config_for_db)
         cursor = db.cursor()
 
         sql = "SELECT r.name, h.date FROM history AS h " \
@@ -55,7 +56,7 @@ def get_last_orders(machine_id, limit):
 
 def add_order_to_history(machine_id, receipt_id):
     try:
-        db = mysql.connector.Connect(**config)
+        db = mysql.connector.Connect(**config_for_db)
         cursor = db.cursor()
 
         sql = "INSERT INTO history(machine_id, receipt_id, date) " \
@@ -75,7 +76,7 @@ def add_order_to_history(machine_id, receipt_id):
 
 def get_statistic_of_used_resources(machine_id):
     try:
-        db = mysql.connector.Connect(**config)
+        db = mysql.connector.Connect(**config_for_db)
         cursor = db.cursor()
 
         sql = "SELECT r.name, COUNT(h.id) AS number_of_orders " \

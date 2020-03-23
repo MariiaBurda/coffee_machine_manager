@@ -1,12 +1,12 @@
 import mysql.connector
 import sys
 
-from .config import config
+from .config import config_for_db
 
 
 def get_receipt_info(machine_id, receipt_id):
     try:
-        db = mysql.connector.Connect(**config)
+        db = mysql.connector.Connect(**config_for_db)
         cursor = db.cursor()
 
         sql = "SELECT mr.machine_id, r.id, r.name, r.water_ml, r.milk_ml, r. coffee_gr " \
@@ -30,7 +30,7 @@ def get_receipt_info(machine_id, receipt_id):
 
 def get_receipts_list():
     try:
-        db = mysql.connector.Connect(**config)
+        db = mysql.connector.Connect(**config_for_db)
         cursor = db.cursor()
 
         sql = "SELECT id, name " \
