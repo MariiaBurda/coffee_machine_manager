@@ -1,24 +1,27 @@
-import sys
+from .config import config_for_db
 
-from .history_operations import add_order_to_history
-from .machine_operations import pull_out_current_value_of_each_resource, change_current_value_of_used_resources
+from .history_operations import AddOrderToHistory
+from .machine_operations import pull_out_current_value_of_each_resource, ChangeCurrentValueOfUsedResources
 from .receipt_operations import get_receipt_resources_value
 
 
 def make_coffee(machine_id, receipt_id):
     try:
         current_water_ml, current_milk_ml, current_coffee_gr = pull_out_current_value_of_each_resource(machine_id)
+        print('pull_out_current_value_of_each_resource finished')
         receipt_water_ml, receipt_milk_ml, receipt_coffee_gr = get_receipt_resources_value(machine_id, receipt_id)
+        print('get_receipt_resources_value finished')
 
         if current_water_ml >= receipt_water_ml \
                 and current_milk_ml >= receipt_milk_ml \
                 and current_coffee_gr >= receipt_coffee_gr:
-            change_current_value_of_used_resources(machine_id, receipt_water_ml, receipt_milk_ml, receipt_coffee_gr)
-            add_order_to_history(machine_id, receipt_id)
+            with ChangeCurrentValueOfUsedResources(config_for_db) as interface_connector:
+                interface_connector.change_current_value_of_used_resources(machine_id, receipt_water_ml, receipt_milk_ml, receipt_coffee_gr)
+            with AddOrderToHistory(config_for_db) as interface_connector:
+                interface_connector.add_order_to_history(machine_id, receipt_id)
             return True
         else:
             return False
-    except:
-        print('Error: {}. {}, line: {}'.format(sys.exc_info()[0],
-                                               sys.exc_info()[1],
-                                               sys.exc_info()[2].tb_lineno))
+
+    except Exception as e:
+        print("Something went wrong: {}".format(e))
