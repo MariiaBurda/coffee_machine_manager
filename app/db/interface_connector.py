@@ -4,8 +4,6 @@ import mysql.connector
 class InterfaceConnector:
     def __init__(self, db_config):
         self.config_for_db = db_config
-        self.data = ()
-        self.sql = ""
 
     def __enter__(self):
         self.db = mysql.connector.Connect(**self.config_for_db)

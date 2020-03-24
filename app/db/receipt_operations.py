@@ -3,35 +3,27 @@ from .interface_connector import InterfaceConnector
 
 
 class GetReceiptInfo(InterfaceConnector):
-    def __init__(self, db_config):
-        InterfaceConnector.__init__(self, db_config)
-        self.row = []
-
     def get_receipt_info(self, machine_id, receipt_id):
-        self.sql = "SELECT mr.machine_id, r.id, r.name, r.water_ml, r.milk_ml, r. coffee_gr " \
+        sql = "SELECT mr.machine_id, r.id, r.name, r.water_ml, r.milk_ml, r. coffee_gr " \
               "FROM machine_receipt AS mr " \
               "INNER JOIN receipt AS r " \
               "ON mr.receipt_id = r.id " \
               "WHERE mr.machine_id = %s AND mr.receipt_id = %s"
-        self.data = (machine_id, receipt_id)
-        self.cursor.execute(self.sql, self.data)
-        self.row = self.cursor.fetchone()
+        data = (machine_id, receipt_id)
+        self.cursor.execute(sql, data)
+        row = self.cursor.fetchone()
 
-        return self.row
+        return row
 
 
 class GetReceiptsList(InterfaceConnector):
-    def __init__(self, db_config):
-        InterfaceConnector.__init__(self, db_config)
-        self.rows = []
-
     def get_receipts_list(self):
-        self.sql = "SELECT id, name " \
+        sql = "SELECT id, name " \
               "FROM receipt"
-        self.cursor.execute(self.sql)
-        self.rows = self.cursor.fetchall()
+        self.cursor.execute(sql)
+        rows = self.cursor.fetchall()
 
-        return self.rows
+        return rows
 
 
 def get_receipt_resources_value(machine_id, receipt_id):
