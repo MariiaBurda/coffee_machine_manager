@@ -1,5 +1,6 @@
 import socketio
 import os
+import argparse
 
 sio = socketio.Client()
 
@@ -27,7 +28,7 @@ def show_receipts_list(data):
 @sio.event
 def show_history(data):
     for item in data:
-        print(item[0], ':', item[1])
+        print(str(item[0]) + ': ' + str(item[1]))
 
     print_back()
     process_back()
@@ -61,6 +62,11 @@ def fill_resources_to_client(data):
     print(data)
     print_back()
     process_back()
+
+
+@sio.event
+def pass_db_sys(data):
+    pass
 
 
 @sio.event
@@ -119,14 +125,33 @@ def process_command():
         sio.emit('fill_resources_to_client')
     elif cmd == "6":
         sio.disconnect()
-        print("have a nice day")
+        print("Have a wonderful day :)")
     else:
         print("Unknown command. Please enter again")
         process_command()
 
 
+def parse_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-dB", "--dbSystem", help="Db system.", type=str, default='sqlite')
+    arg = parser.parse_args()
+
+    return arg
+
+
+def choose_db(db_system='sqlite'):
+    if db_system == 'sqlite':
+        return 'sqlite'
+    elif db_system == 'mysql':
+        return 'mysql'
+
+
 if __name__ == '__main__':
     sio.connect('http://localhost:5000')
+    args = parse_arguments()
+    db_sys = choose_db(args.dbSystem)
+
+    sio.emit('pass_db_sys', db_sys)
 
     print_menu()
     process_command()

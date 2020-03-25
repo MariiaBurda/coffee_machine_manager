@@ -7,6 +7,7 @@ from app.db.history_operations import GetLastOrders, GetStatisticOfUsedResources
 from app.db.machine_operations import FillResources, GetCurrentValueOfAllResources
 from app.db.coffee_operations import make_coffee
 from app.db.receipt_operations import GetReceiptsList
+from app.db.db_helper import DbHelper
 
 machine_id = 1
 
@@ -46,8 +47,7 @@ def show_history(sid):
     with GetLastOrders(config_for_db) as interface_connector:
         last_orders = interface_connector.get_last_orders(machine_id, 10)
     print('getting %s last orders' % len(last_orders))
-    mapped_orders = list(map(lambda x: (x[0], x[1].strftime("%m/%d/%Y, %H:%M:%S")), last_orders))
-    sio.emit('show_history', mapped_orders)
+    sio.emit('show_history', last_orders)
     print('end execution of show_history')
 
 
@@ -79,6 +79,13 @@ def fill_resources_to_client(sid):
     message_to_client = "Resources are filled"
     sio.emit('fill_resources_to_client', message_to_client)
     print('end execution of fill_resources_to_client')
+
+
+@sio.event
+def pass_db_sys(sid, db_sys):
+    print('start execution of pass_db_sys')
+    DbHelper.set_db_system(db_sys)
+    print('end execution of pass_db_sys')
 
 
 @sio.event
