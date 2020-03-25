@@ -8,7 +8,7 @@ class FillResources(InterfaceConnector):
               "SET current_water_ml = max_water_ml, " \
               "current_milk_ml = max_milk_ml, " \
               "current_coffee_gr = max_coffee_gr " \
-              "WHERE id = %s"
+              f"WHERE id = {self.symbol}"
         data = (machine_id,)
         self.cursor.execute(sql, data)
 
@@ -19,7 +19,7 @@ class GetCurrentValueOfAllResources(InterfaceConnector):
     def get_current_value_of_all_resources(self, machine_id):
         sql = "SELECT id, name, current_water_ml, current_milk_ml, current_coffee_gr " \
               "FROM machine " \
-              "WHERE id = %s"
+              f"WHERE id = {self.symbol}"
         data = (machine_id,)
         self.cursor.execute(sql, data)
         row = self.cursor.fetchone()
@@ -44,10 +44,10 @@ def pull_out_current_value_of_each_resource(machine_id):
 class ChangeCurrentValueOfUsedResources(InterfaceConnector):
     def change_current_value_of_used_resources(self, machine_id, water_ml, milk_ml, coffee_gr):
         sql = "UPDATE machine " \
-                   "SET current_water_ml = current_water_ml - %s, " \
-                   "current_milk_ml = current_milk_ml - %s, " \
-                   "current_coffee_gr = current_coffee_gr - %s " \
-                   "WHERE id = %s"
+                   f"SET current_water_ml = current_water_ml - {self.symbol}, " \
+                   f"current_milk_ml = current_milk_ml - {self.symbol}, " \
+                   f"current_coffee_gr = current_coffee_gr - {self.symbol} " \
+                   f"WHERE id = {self.symbol}"
         data = (water_ml, milk_ml, coffee_gr, machine_id)
         self.cursor.execute(sql, data)
 

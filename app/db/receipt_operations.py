@@ -8,7 +8,7 @@ class GetReceiptInfo(InterfaceConnector):
               "FROM machine_receipt AS mr " \
               "INNER JOIN receipt AS r " \
               "ON mr.receipt_id = r.id " \
-              "WHERE mr.machine_id = %s AND mr.receipt_id = %s"
+              f"WHERE mr.machine_id = {self.symbol} AND mr.receipt_id = {self.symbol}"
         data = (machine_id, receipt_id)
         self.cursor.execute(sql, data)
         row = self.cursor.fetchone()

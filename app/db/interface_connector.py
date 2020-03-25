@@ -1,4 +1,6 @@
 import mysql.connector
+import sqlite3
+from.db_helper import DbHelper
 
 
 class InterfaceConnector:
@@ -6,7 +8,16 @@ class InterfaceConnector:
         self.config_for_db = db_config
 
     def __enter__(self):
-        self.db = mysql.connector.Connect(**self.config_for_db)
+        self.db_sys = DbHelper.get_db_system()
+        if self.db_sys == 'mysql':
+            self.symbol = '%s'
+            self.time = "NOW()"
+            self.db = mysql.connector.Connect(**self.config_for_db)
+        elif self.db_sys == 'sqlite':
+            self.symbol = '?'
+            self.time = "strftime('%d-%m-%Y %H:%M:%S', 'now')"
+            self.db = sqlite3.connect("prod_coffee_machine.db")
+
         self.cursor = self.db.cursor()
         return self
 
