@@ -4,4 +4,4 @@ venv
 app/__pycache__
 app/db/config.py
 app/db/__pycache__
-app/prod_coffee_machine.db
+database/initialization/sqlite/sqlite_coffee_machine.db

@@ -1,7 +1,7 @@
 import sqlite3
 
 
-def prod_db_seed(db):
+def sqlite_db_seed(db):
     conn = sqlite3.connect(db)
     cursor = conn.cursor()
 

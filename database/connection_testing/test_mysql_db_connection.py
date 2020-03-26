@@ -1,6 +1,6 @@
 import mysql.connector
 
-from config import config_for_db
+from app.db.config import config_for_db
 
 
 def get_db_tables(db_config):

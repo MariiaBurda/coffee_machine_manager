@@ -1,5 +1,5 @@
 import sqlite3
-from run_db import db
+from database.initialization.sqlite.run_db import db
 
 machine_id = 1
 receipt_id = 2
@@ -17,7 +17,7 @@ def get_all_receipts(db):
 
 
 def get_receipt_resources_value(db, machine_id, receipt_id):
-    conn = sqlite3.connect("prod_coffee_machine.db")
+    conn = sqlite3.connect(db)
     cursor = conn.cursor()
 
     sql = "SELECT mr.machine_id, r.id, r.name, r.water_ml, r.milk_ml, r. coffee_gr " \
