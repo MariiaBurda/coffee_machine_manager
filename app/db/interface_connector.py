@@ -1,6 +1,7 @@
 import mysql.connector
 import sqlite3
 from.db_helper import DbHelper
+from database.initialization.sqlite.run_db import db_path
 
 
 class InterfaceConnector:
@@ -16,7 +17,7 @@ class InterfaceConnector:
         elif self.db_sys == 'sqlite':
             self.symbol = '?'
             self.time = "strftime('%d-%m-%Y %H:%M:%S', 'now')"
-            self.db = sqlite3.connect("prod_coffee_machine.db")
+            self.db = sqlite3.connect(db_path)
 
         self.cursor = self.db.cursor()
         return self

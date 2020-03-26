@@ -1,5 +1,5 @@
 import sqlite3
-from database.initialization.sqlite.run_db import db
+from database.initialization.sqlite.run_db import db_path
 
 machine_id = 1
 receipt_id = 2
@@ -33,8 +33,8 @@ def get_receipt_resources_value(db, machine_id, receipt_id):
 
 
 if __name__ == '__main__':
-    receipts_list = get_all_receipts(db)
+    receipts_list = get_all_receipts(db_path)
     print(receipts_list)
 
-    receipt_resources_value_list = get_receipt_resources_value(db, machine_id, receipt_id)
+    receipt_resources_value_list = get_receipt_resources_value(db_path, machine_id, receipt_id)
     print(receipt_resources_value_list)
