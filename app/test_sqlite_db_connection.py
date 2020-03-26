@@ -1,11 +1,12 @@
 import sqlite3
+from run_db import db
 
 machine_id = 1
 receipt_id = 2
 
 
-def get_all_receipts():
-    conn = sqlite3.connect("prod_coffee_machine.db")
+def get_all_receipts(db):
+    conn = sqlite3.connect(db)
     cursor = conn.cursor()
 
     sql = "SELECT id, name " \
@@ -15,7 +16,7 @@ def get_all_receipts():
     return rows
 
 
-def get_receipt_resources_value(machine_id, receipt_id):
+def get_receipt_resources_value(db, machine_id, receipt_id):
     conn = sqlite3.connect("prod_coffee_machine.db")
     cursor = conn.cursor()
 
@@ -32,8 +33,8 @@ def get_receipt_resources_value(machine_id, receipt_id):
 
 
 if __name__ == '__main__':
-    receipts_list = get_all_receipts()
+    receipts_list = get_all_receipts(db)
     print(receipts_list)
 
-    receipt_resources_value_list = get_receipt_resources_value(machine_id, receipt_id)
+    receipt_resources_value_list = get_receipt_resources_value(db, machine_id, receipt_id)
     print(receipt_resources_value_list)

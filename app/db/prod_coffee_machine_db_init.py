@@ -1,8 +1,8 @@
 import sqlite3
 
 
-def prod_db_init():
-    conn = sqlite3.connect("prod_coffee_machine.db")
+def prod_db_init(db):
+    conn = sqlite3.connect(db)
     cursor = conn.cursor()
 
     tables = [

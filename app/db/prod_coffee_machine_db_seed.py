@@ -1,8 +1,8 @@
 import sqlite3
 
 
-def prod_db_seed():
-    conn = sqlite3.connect("prod_coffee_machine.db")
+def prod_db_seed(db):
+    conn = sqlite3.connect(db)
     cursor = conn.cursor()
 
     data_list = [
