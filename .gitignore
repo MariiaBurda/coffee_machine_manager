@@ -1,9 +1,7 @@
 venv
 .idea
 .venv
-app/__pycache__
 app/db/config.py
-app/db/__pycache__
-database/initialization/sqlite/__pycache__
-database/initialization/sqlite/sqlite_coffee_machine.db
+sqlite_coffee_machine.db
+__pycache__/
 
