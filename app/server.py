@@ -1,13 +1,13 @@
 import eventlet
 import socketio
 
-from app.db.config import config_for_db
+from db.config import config_for_db
 
-from app.db.history_operations import GetLastOrders, GetStatisticOfUsedResources
-from app.db.machine_operations import FillResources, GetCurrentValueOfAllResources
-from app.db.coffee_operations import make_coffee
-from app.db.receipt_operations import GetReceiptsList
-from app.db.db_helper import DbHelper
+from db.history_operations import GetLastOrders, GetStatisticOfUsedResources
+from db.machine_operations import FillResources, GetCurrentValueOfAllResources
+from db.coffee_operations import make_coffee
+from db.receipt_operations import GetReceiptsList
+from db.db_helper import DbHelper
 
 machine_id = 1
 
