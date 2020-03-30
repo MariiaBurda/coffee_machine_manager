@@ -3,10 +3,10 @@ import socketio
 
 from db.config import config_for_db
 
-from db.history_operations import GetLastOrders, GetStatisticOfUsedResources
-from db.machine_operations import FillResources, GetCurrentValueOfAllResources
+from db.history_operations import HistoryOperations
+from db.machine_operations import MachineOperations
 from db.coffee_operations import make_coffee
-from db.receipt_operations import GetReceiptsList
+from db.receipt_operations import ReceiptOperations
 from db.db_helper import DbHelper
 
 machine_id = 1
@@ -34,7 +34,7 @@ def make_coffee_for_client(sid, receipt_id):
 @sio.event
 def show_receipts_list(sid):
     print('start execution of show_receipts_list')
-    with GetReceiptsList(config_for_db) as interface_connector:
+    with ReceiptOperations(config_for_db) as interface_connector:
         receipts_list = interface_connector.get_receipts_list()
     print('getting receipts_list, length: %s' % len(receipts_list))
     sio.emit('show_receipts_list', receipts_list)
@@ -44,7 +44,7 @@ def show_receipts_list(sid):
 @sio.event
 def show_history(sid):
     print('start execution of show_history')
-    with GetLastOrders(config_for_db) as interface_connector:
+    with HistoryOperations(config_for_db) as interface_connector:
         last_orders = interface_connector.get_last_orders(machine_id, 10)
     print('getting %s last orders' % len(last_orders))
     sio.emit('show_history', last_orders)
@@ -54,7 +54,7 @@ def show_history(sid):
 @sio.event
 def show_statistic_of_the_amount_of_coffee_drunk(sid):
     print('start execution of show_statistic_of_the_amount_of_coffee_drunk')
-    with GetStatisticOfUsedResources(config_for_db) as interface_connector:
+    with HistoryOperations(config_for_db) as interface_connector:
         list_of_the_amount_of_coffee_drunk = interface_connector.get_statistic_of_used_resources(machine_id)
     print('getting list_of_the_amount_of_coffee_drunk')
     sio.emit('show_statistic_of_the_amount_of_coffee_drunk', list_of_the_amount_of_coffee_drunk)
@@ -64,7 +64,7 @@ def show_statistic_of_the_amount_of_coffee_drunk(sid):
 @sio.event
 def show_current_resources_value(sid):
     print('start execution of show_current_resources_value')
-    with GetCurrentValueOfAllResources(config_for_db) as interface_connector:
+    with MachineOperations(config_for_db) as interface_connector:
         list_of_current_value_of_all_resources = list(interface_connector.get_current_value_of_all_resources(machine_id))
     print('getting list_of_current_value_of_all_resources')
     sio.emit('show_current_resources_value', list_of_current_value_of_all_resources)
@@ -74,7 +74,7 @@ def show_current_resources_value(sid):
 @sio.event
 def fill_resources_to_client(sid):
     print('start execution of fill_resources_to_client')
-    with FillResources(config_for_db) as interface_connector:
+    with MachineOperations(config_for_db) as interface_connector:
         interface_connector.fill_resources(machine_id)
     message_to_client = "Resources are filled"
     sio.emit('fill_resources_to_client', message_to_client)
