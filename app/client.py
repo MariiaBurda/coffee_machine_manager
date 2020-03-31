@@ -1,6 +1,5 @@
 import socketio
 import os
-import argparse
 
 sio = socketio.Client()
 
@@ -65,11 +64,6 @@ def fill_resources_to_client(data):
 
 
 @sio.event
-def pass_db_sys(data):
-    pass
-
-
-@sio.event
 def disconnect():
     pass
 
@@ -131,27 +125,7 @@ def process_command():
         process_command()
 
 
-def parse_arguments():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-dB", "--dbSystem", help="Db system.", type=str, default='sqlite')
-    arg = parser.parse_args()
-
-    return arg
-
-
-def choose_db(db_system='sqlite'):
-    if db_system == 'sqlite':
-        return 'sqlite'
-    elif db_system == 'mysql':
-        return 'mysql'
-
-
 if __name__ == '__main__':
     sio.connect('http://localhost:5000')
-    args = parse_arguments()
-    db_sys = choose_db(args.dbSystem)
-
-    sio.emit('pass_db_sys', db_sys)
-
     print_menu()
     process_command()

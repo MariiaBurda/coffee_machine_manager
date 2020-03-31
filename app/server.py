@@ -1,5 +1,6 @@
 import eventlet
 import socketio
+import argparse
 
 from db.config import config_for_db
 
@@ -82,16 +83,35 @@ def fill_resources_to_client(sid):
 
 
 @sio.event
-def pass_db_sys(sid, db_sys):
-    print('start execution of pass_db_sys')
-    DbHelper.set_db_system(db_sys)
-    print('end execution of pass_db_sys')
-
-
-@sio.event
 def disconnect(sid):
     print('disconnect ', sid)
 
 
+def parse_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-dB", "--dbSystem", help="Db system.", type=str, default='sqlite')
+    arg = parser.parse_args()
+
+    return arg
+
+
+def choose_db(db_system='sqlite'):
+    if db_system == 'sqlite':
+        return 'sqlite'
+    elif db_system == 'mysql':
+        return 'mysql'
+
+
+def pass_db_sys(db_system):
+    print('start execution of pass_db_sys')
+    DbHelper.set_db_system(db_system)
+    print('end execution of pass_db_sys')
+
+
 if __name__ == '__main__':
+    args = parse_arguments()
+    db_sys = choose_db(args.dbSystem)
+    print(f'chosen db sys: {db_sys}')
+    pass_db_sys(db_sys)
     eventlet.wsgi.server(eventlet.listen(('', 5000)), app)
+
