@@ -1,9 +1,9 @@
 import mysql.connector
 import sqlite3
 
-from initialization.sqlite.run_db import db_path
+from database.initialization.sqlite.run_db import db_path
 
-from.db_helper import DbHelper
+from .db_helper import DbHelper
 
 
 class InterfaceConnector:
