@@ -1,45 +1,46 @@
-from .config import config_for_db
-from .interface_connector import InterfaceConnector
+from .interface_connector import Closing
+from .base_operation import BaseOperation
 
 
-class MachineOperations(InterfaceConnector):
+class MachineOperations(BaseOperation):
     def fill_resources(self, machine_id):
-        sql = "UPDATE machine " \
-              "SET current_water_ml = max_water_ml, " \
-              "current_milk_ml = max_milk_ml, " \
-              "current_coffee_gr = max_coffee_gr " \
-              f"WHERE id = {self.symbol}"
-        data = (machine_id,)
-        self.cursor.execute(sql, data)
+        with Closing(self.connector) as closing:
+            sql = "UPDATE machine " \
+                  "SET current_water_ml = max_water_ml, " \
+                  "current_milk_ml = max_milk_ml, " \
+                  "current_coffee_gr = max_coffee_gr " \
+                  f"WHERE id = {closing.symbol}"
+            data = (machine_id,)
+            closing.cursor.execute(sql, data)
 
-        self.db.commit()
+            closing.db.commit()
 
     def get_current_value_of_all_resources(self, machine_id):
-        sql = "SELECT id, name, current_water_ml, current_milk_ml, current_coffee_gr " \
-              "FROM machine " \
-              f"WHERE id = {self.symbol}"
-        data = (machine_id,)
-        self.cursor.execute(sql, data)
-        row = self.cursor.fetchone()
+        with Closing(self.connector) as closing:
+            sql = "SELECT id, name, current_water_ml, current_milk_ml, current_coffee_gr " \
+                  "FROM machine " \
+                  f"WHERE id = {closing.symbol}"
+            data = (machine_id,)
+            closing.cursor.execute(sql, data)
+            row = closing.cursor.fetchone()
 
-        return row
+            return row
 
     def change_current_value_of_used_resources(self, machine_id, water_ml, milk_ml, coffee_gr):
-        sql = "UPDATE machine " \
-                   f"SET current_water_ml = current_water_ml - {self.symbol}, " \
-                   f"current_milk_ml = current_milk_ml - {self.symbol}, " \
-                   f"current_coffee_gr = current_coffee_gr - {self.symbol} " \
-                   f"WHERE id = {self.symbol}"
-        data = (water_ml, milk_ml, coffee_gr, machine_id)
-        self.cursor.execute(sql, data)
+        with Closing(self.connector) as closing:
+            sql = "UPDATE machine " \
+                       f"SET current_water_ml = current_water_ml - {closing.symbol}, " \
+                       f"current_milk_ml = current_milk_ml - {closing.symbol}, " \
+                       f"current_coffee_gr = current_coffee_gr - {closing.symbol} " \
+                       f"WHERE id = {closing.symbol}"
+            data = (water_ml, milk_ml, coffee_gr, machine_id)
+            closing.cursor.execute(sql, data)
 
-        self.db.commit()
+            closing.db.commit()
 
-    @staticmethod
-    def pull_out_current_value_of_each_resource(machine_id):
+    def pull_out_current_value_of_each_resource(self, machine_id):
         try:
-            with MachineOperations(config_for_db) as interface_connector:
-                current_state = interface_connector.get_current_value_of_all_resources(machine_id)
+            current_state = self.get_current_value_of_all_resources(machine_id)
             print(current_state)
             current_water_ml = current_state[2]
             current_milk_ml = current_state[3]

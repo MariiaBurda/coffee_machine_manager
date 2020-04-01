@@ -2,15 +2,24 @@ import eventlet
 import socketio
 import argparse
 
-from db.config import config_for_db
-
-from db.history_operations import HistoryOperations
-from db.machine_operations import MachineOperations
-from db.coffee_operations import make_coffee
-from db.receipt_operations import ReceiptOperations
-from db.db_helper import DbHelper
+from app.db.history_operations import HistoryOperations
+from app.db.machine_operations import MachineOperations
+from app.db.receipt_operations import ReceiptOperations
+from app.db import coffee_operations
+from app.db.db_helper import DbHelper
 
 machine_id = 1
+print('start execution of history_operations')
+history_operations = HistoryOperations()
+print('end execution of history_operations\n')
+
+print('start execution of machine_operations')
+machine_operations = MachineOperations()
+print('end execution of machine_operations\n')
+
+print('start execution of receipt_operations')
+receipt_operations = ReceiptOperations()
+print('end execution of receipt_operations\n')
 
 sio = socketio.Server()
 app = socketio.WSGIApp(sio, static_files={
@@ -26,7 +35,7 @@ def connect(sid, environ):
 @sio.event
 def make_coffee_for_client(sid, receipt_id):
     print('start execution of make_coffee_for_client')
-    result = make_coffee(machine_id, receipt_id)
+    result = coffee_operations.make_coffee(machine_id, receipt_id)
     print(result)
     sio.emit('make_coffee_for_client', result)
     print('end execution of make_coffee_for_client')
@@ -35,8 +44,7 @@ def make_coffee_for_client(sid, receipt_id):
 @sio.event
 def show_receipts_list(sid):
     print('start execution of show_receipts_list')
-    with ReceiptOperations(config_for_db) as interface_connector:
-        receipts_list = interface_connector.get_receipts_list()
+    receipts_list = receipt_operations.get_receipts_list()
     print('getting receipts_list, length: %s' % len(receipts_list))
     sio.emit('show_receipts_list', receipts_list)
     print('end execution of show_receipts_list')
@@ -45,8 +53,7 @@ def show_receipts_list(sid):
 @sio.event
 def show_history(sid):
     print('start execution of show_history')
-    with HistoryOperations(config_for_db) as interface_connector:
-        last_orders = interface_connector.get_last_orders(machine_id, 10)
+    last_orders = history_operations.get_last_orders(machine_id, 10)
     print('getting %s last orders' % len(last_orders))
     sio.emit('show_history', last_orders)
     print('end execution of show_history')
@@ -55,8 +62,7 @@ def show_history(sid):
 @sio.event
 def show_statistic_of_the_amount_of_coffee_drunk(sid):
     print('start execution of show_statistic_of_the_amount_of_coffee_drunk')
-    with HistoryOperations(config_for_db) as interface_connector:
-        list_of_the_amount_of_coffee_drunk = interface_connector.get_statistic_of_used_resources(machine_id)
+    list_of_the_amount_of_coffee_drunk = history_operations.get_statistic_of_used_resources(machine_id)
     print('getting list_of_the_amount_of_coffee_drunk')
     sio.emit('show_statistic_of_the_amount_of_coffee_drunk', list_of_the_amount_of_coffee_drunk)
     print('end execution of show_statistic_of_the_amount_of_coffee_drunk')
@@ -65,8 +71,7 @@ def show_statistic_of_the_amount_of_coffee_drunk(sid):
 @sio.event
 def show_current_resources_value(sid):
     print('start execution of show_current_resources_value')
-    with MachineOperations(config_for_db) as interface_connector:
-        list_of_current_value_of_all_resources = list(interface_connector.get_current_value_of_all_resources(machine_id))
+    list_of_current_value_of_all_resources = list(machine_operations.get_current_value_of_all_resources(machine_id))
     print('getting list_of_current_value_of_all_resources')
     sio.emit('show_current_resources_value', list_of_current_value_of_all_resources)
     print('end execution of show_current_resources_value')
@@ -75,8 +80,7 @@ def show_current_resources_value(sid):
 @sio.event
 def fill_resources_to_client(sid):
     print('start execution of fill_resources_to_client')
-    with MachineOperations(config_for_db) as interface_connector:
-        interface_connector.fill_resources(machine_id)
+    machine_operations.fill_resources(machine_id)
     message_to_client = "Resources are filled"
     sio.emit('fill_resources_to_client', message_to_client)
     print('end execution of fill_resources_to_client')
@@ -114,4 +118,3 @@ if __name__ == '__main__':
     print(f'chosen db sys: {db_sys}')
     pass_db_sys(db_sys)
     eventlet.wsgi.server(eventlet.listen(('', 5000)), app)
-

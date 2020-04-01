@@ -1,33 +1,32 @@
-from .config import config_for_db
-from .interface_connector import InterfaceConnector
+from .interface_connector import Closing
+from .base_operation import BaseOperation
 
 
-class ReceiptOperations(InterfaceConnector):
+class ReceiptOperations(BaseOperation):
     def get_receipt_info(self, machine_id, receipt_id):
-        sql = "SELECT mr.machine_id, r.id, r.name, r.water_ml, r.milk_ml, r. coffee_gr " \
-              "FROM machine_receipt AS mr " \
-              "INNER JOIN receipt AS r " \
-              "ON mr.receipt_id = r.id " \
-              f"WHERE mr.machine_id = {self.symbol} AND mr.receipt_id = {self.symbol}"
-        data = (machine_id, receipt_id)
-        self.cursor.execute(sql, data)
-        row = self.cursor.fetchone()
+        with Closing(self.connector) as closing:
+            sql = "SELECT mr.machine_id, r.id, r.name, r.water_ml, r.milk_ml, r. coffee_gr " \
+                  "FROM machine_receipt AS mr " \
+                  "INNER JOIN receipt AS r " \
+                  "ON mr.receipt_id = r.id " \
+                  f"WHERE mr.machine_id = {closing.symbol} AND mr.receipt_id = {closing.symbol}"
+            data = (machine_id, receipt_id)
+            closing.cursor.execute(sql, data)
+            row = closing.cursor.fetchone()
 
-        return row
+            return row
 
     def get_receipts_list(self):
-        sql = "SELECT id, name " \
-              "FROM receipt"
-        self.cursor.execute(sql)
-        rows = self.cursor.fetchall()
+        with Closing(self.connector) as closing:
+            sql = "SELECT id, name " \
+                  "FROM receipt"
+            closing.cursor.execute(sql)
+            rows = closing.cursor.fetchall()
+            return rows
 
-        return rows
-
-    @staticmethod
-    def get_receipt_resources_value(machine_id, receipt_id):
+    def get_receipt_resources_value(self, machine_id, receipt_id):
         try:
-            with ReceiptOperations(config_for_db) as interface_connector:
-                receipt = interface_connector.get_receipt_info(machine_id, receipt_id)
+            receipt = self.get_receipt_info(machine_id, receipt_id)
             print(receipt)
             receipt_water_ml = receipt[3]
             receipt_milk_ml = receipt[4]
