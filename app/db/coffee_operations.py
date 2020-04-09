@@ -1,4 +1,4 @@
-from app.server import history_operations, machine_operations, receipt_operations
+from server import history_operations, machine_operations, receipt_operations
 
 
 def make_coffee(machine_id, receipt_id):

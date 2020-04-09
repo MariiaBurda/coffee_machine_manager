@@ -1,7 +1,7 @@
 import mysql.connector
 import sqlite3
 
-from app.database.initialization.sqlite.run_db import db_path
+from database.initialization.sqlite.run_db import db_path
 from .config import config_for_db
 
 

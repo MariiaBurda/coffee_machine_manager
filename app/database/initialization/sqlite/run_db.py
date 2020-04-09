@@ -1,5 +1,5 @@
-from app.database.initialization.sqlite.sqlite_coffee_machine_db_init import sqlite_db_init
-from app.database.initialization.sqlite.sqlite_coffee_machine_db_seed import sqlite_db_seed
+from database.initialization.sqlite.sqlite_coffee_machine_db_init import sqlite_db_init
+from database.initialization.sqlite.sqlite_coffee_machine_db_seed import sqlite_db_seed
 import os
 
 path = os.path.dirname(os.path.abspath(__file__))
