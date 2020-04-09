@@ -1,5 +1,5 @@
 import sqlite3
-from database.initialization.sqlite.run_db import db_path
+from app.database.initialization import db_path
 
 machine_id = 1
 receipt_id = 2

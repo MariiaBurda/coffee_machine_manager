@@ -2,11 +2,11 @@ import eventlet
 import socketio
 import argparse
 
-from app.db.history_operations import HistoryOperations
-from app.db.machine_operations import MachineOperations
-from app.db.receipt_operations import ReceiptOperations
-from app.db import coffee_operations
-from app.db.db_helper import DbHelper
+from db.history_operations import HistoryOperations
+from db.machine_operations import MachineOperations
+from db.receipt_operations import ReceiptOperations
+from db import coffee_operations
+from db.db_helper import DbHelper
 
 machine_id = 1
 print('start execution of history_operations')
