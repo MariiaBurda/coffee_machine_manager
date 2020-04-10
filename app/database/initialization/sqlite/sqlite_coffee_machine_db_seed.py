@@ -29,4 +29,4 @@ def sqlite_db_seed(db):
 
 
 if __name__ == "__main__":
-    prod_db_seed()
+    sqlite_db_seed()

@@ -1,6 +1,6 @@
 import mysql.connector
 
-from app.db.config import config_for_db
+from app.operations.config import config_for_db
 
 
 def get_db_tables(db_config):
@@ -35,4 +35,3 @@ if __name__ == '__main__':
 
     receipts_list = get_all_receipts(config_for_db)
     print(receipts_list)
-

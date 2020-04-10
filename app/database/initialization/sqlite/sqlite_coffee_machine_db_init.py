@@ -52,4 +52,4 @@ def sqlite_db_init(db):
 
 
 if __name__ == "__main__":
-    prod_db_init()
+    sqlite_db_init()

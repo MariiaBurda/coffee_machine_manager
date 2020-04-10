@@ -2,13 +2,41 @@ import eventlet
 import socketio
 import argparse
 
-from db.history_operations import HistoryOperations
-from db.machine_operations import MachineOperations
-from db.receipt_operations import ReceiptOperations
-from db import coffee_operations
-from db.db_helper import DbHelper
+from operations.history_operations import HistoryOperations
+from operations.machine_operations import MachineOperations
+from operations.receipt_operations import ReceiptOperations
+from operations import coffee_operations
+from operations.db_helper import DbHelper
 
 machine_id = 1
+
+
+def parse_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-dB", "--dbSystem", help="Db system.", type=str, default='sqlite')
+    arg = parser.parse_args()
+
+    return arg
+
+
+def choose_db(db_system='sqlite'):
+    if db_system == 'sqlite':
+        return 'sqlite'
+    elif db_system == 'mysql':
+        return 'mysql'
+
+
+def pass_db_sys(db_system):
+    print('start execution of pass_db_sys')
+    DbHelper.set_db_system(db_system)
+    print('end execution of pass_db_sys')
+
+
+args = parse_arguments()
+db_sys = choose_db(args.dbSystem)
+print(f'chosen db sys: {db_sys}')
+pass_db_sys(db_sys)
+
 print('start execution of history_operations')
 history_operations = HistoryOperations()
 print('end execution of history_operations\n')
@@ -20,6 +48,7 @@ print('end execution of machine_operations\n')
 print('start execution of receipt_operations')
 receipt_operations = ReceiptOperations()
 print('end execution of receipt_operations\n')
+
 
 sio = socketio.Server()
 app = socketio.WSGIApp(sio, static_files={
@@ -91,30 +120,5 @@ def disconnect(sid):
     print('disconnect ', sid)
 
 
-def parse_arguments():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-dB", "--dbSystem", help="Db system.", type=str, default='sqlite')
-    arg = parser.parse_args()
-
-    return arg
-
-
-def choose_db(db_system='sqlite'):
-    if db_system == 'sqlite':
-        return 'sqlite'
-    elif db_system == 'mysql':
-        return 'mysql'
-
-
-def pass_db_sys(db_system):
-    print('start execution of pass_db_sys')
-    DbHelper.set_db_system(db_system)
-    print('end execution of pass_db_sys')
-
-
 if __name__ == '__main__':
-    args = parse_arguments()
-    db_sys = choose_db(args.dbSystem)
-    print(f'chosen db sys: {db_sys}')
-    pass_db_sys(db_sys)
     eventlet.wsgi.server(eventlet.listen(('', 5000)), app)
