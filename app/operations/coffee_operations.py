@@ -1,7 +1,4 @@
-from server import history_operations, machine_operations, receipt_operations
-
-
-def make_coffee(machine_id, receipt_id):
+def make_coffee(machine_id, receipt_id, history_operations, machine_operations, receipt_operations):
     try:
         current_water_ml, current_milk_ml, current_coffee_gr = machine_operations.pull_out_current_value_of_each_resource(machine_id)
         print('pull_out_current_value_of_each_resource finished')

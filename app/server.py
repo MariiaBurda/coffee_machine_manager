@@ -10,46 +10,6 @@ from operations.db_helper import DbHelper
 
 machine_id = 1
 
-
-def parse_arguments():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-dB", "--dbSystem", help="Db system.", type=str, default='sqlite')
-    arg = parser.parse_args()
-
-    return arg
-
-
-def choose_db(db_system='sqlite'):
-    if db_system == 'sqlite':
-        return 'sqlite'
-    elif db_system == 'mysql':
-        return 'mysql'
-
-
-def pass_db_sys(db_system):
-    print('start execution of pass_db_sys')
-    DbHelper.set_db_system(db_system)
-    print('end execution of pass_db_sys')
-
-
-args = parse_arguments()
-db_sys = choose_db(args.dbSystem)
-print(f'chosen db sys: {db_sys}')
-pass_db_sys(db_sys)
-
-print('start execution of history_operations')
-history_operations = HistoryOperations()
-print('end execution of history_operations\n')
-
-print('start execution of machine_operations')
-machine_operations = MachineOperations()
-print('end execution of machine_operations\n')
-
-print('start execution of receipt_operations')
-receipt_operations = ReceiptOperations()
-print('end execution of receipt_operations\n')
-
-
 sio = socketio.Server()
 app = socketio.WSGIApp(sio, static_files={
     '/': {'content_type': 'text/html', 'filename': 'index.html'}
@@ -64,7 +24,7 @@ def connect(sid, environ):
 @sio.event
 def make_coffee_for_client(sid, receipt_id):
     print('start execution of make_coffee_for_client')
-    result = coffee_operations.make_coffee(machine_id, receipt_id)
+    result = coffee_operations.make_coffee(machine_id, receipt_id, history_operations, machine_operations, receipt_operations)
     print(result)
     sio.emit('make_coffee_for_client', result)
     print('end execution of make_coffee_for_client')
@@ -120,5 +80,43 @@ def disconnect(sid):
     print('disconnect ', sid)
 
 
+def parse_arguments():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-dB", "--dbSystem", help="Db system.", type=str, default='sqlite')
+    arg = parser.parse_args()
+
+    return arg
+
+
+def choose_db(db_system='sqlite'):
+    if db_system == 'sqlite':
+        return 'sqlite'
+    elif db_system == 'mysql':
+        return 'mysql'
+
+
+def pass_db_sys(db_system):
+    print('start execution of pass_db_sys')
+    DbHelper.set_db_system(db_system)
+    print('end execution of pass_db_sys')
+
+
 if __name__ == '__main__':
+    args = parse_arguments()
+    db_sys = choose_db(args.dbSystem)
+    print(f'chosen db sys: {db_sys}\n')
+    pass_db_sys(db_sys)
+
+    print('start execution of history_operations')
+    history_operations = HistoryOperations()
+    print('end execution of history_operations\n')
+
+    print('start execution of machine_operations')
+    machine_operations = MachineOperations()
+    print('end execution of machine_operations\n')
+
+    print('start execution of receipt_operations')
+    receipt_operations = ReceiptOperations()
+    print('end execution of receipt_operations\n')
+
     eventlet.wsgi.server(eventlet.listen(('', 5000)), app)
