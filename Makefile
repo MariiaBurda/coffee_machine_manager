@@ -10,12 +10,12 @@ install:
 	pip install -r requirements.txt
 	
 run_db:
-	echo "Db"
+	echo "Rinning sqlite database"
 	. venv/bin/activate
 	python app/run_db.py
 
 run_server:
-	echo "server"
+	echo "Running server.py module"
 	. venv/bin/activate
 	python app/server.py
 
