@@ -5,16 +5,68 @@ Simulation of a remote coffee machine management by python-socketio. Used Python
 
 ![coffee_machine_manager_db_diagram](https://user-images.githubusercontent.com/56352901/76962995-f0ee9f80-6928-11ea-9b0b-80deabacba98.png)
 
-### To set up and use the database you need:
-If you want to use SQLite3:
-1. Run database/initialization/sqlite/run_db.py to initialize and populate the database
-2. Use database/connection_testing/test_sqlite_db_connection to test db connect
+### Getting Started
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+
+### Clone
+
+- Clone this repo to your local machine using `https://github.com/MariiaBurda/coffee_machine_manager/`
+
+### Setup
+
+- If you want to use makefile, skip this step and go to Usage -- Option 2
+
+> create and activate virtual environment first
+
+```shell
+$ python3 -m venv venv
+$ . venv/bin/activate
+```
+
+> install all needed packages
+
+```shell
+$ pip install -r requirements.txt
+```
+
+> create and populate sqlite database
+
+```shell
+$ python app/run_db.py
+```
+
+> test database connection
+
+```shell
+$ python app/database/connection_testing/test_sqlite_db_connection.py
+```
 
 
-If you want to use MySQL:
-1. Install MySQL-server (necessarily) and MySQL Workbench (optionally)
-2. Use database/initialization/mysql/mysql_coffee_machine_db_init.sql to create database and tables
-3. Use database/initialization/mysql/mysql_coffee_machine_db_seed.sql to populate tables
-4. Create app/db/config.py file and fill with your information: config_for_db = { 'host': 'your_host_name', 'port': your_port_name, 'database': 'coffee_machine_manager', 'user': 'your_user_name', 'password': 'your_password', 'charset': 'utf8', 'use_unicode': True, 'get_warnings': True, }
-5. Install mysql.connector
-6. Use database/connection_testing/test_mysql_db_connection to test db connect
+### Usage
+- Option 1: 
+
+> run server.py
+
+```shell
+$ python app/server.py
+```
+
+> open new terminal, activate virtual env and run client.py
+
+```shell
+$ . venv/bin/activate
+$ python app/client.py
+```
+- Option 2: use makefile
+
+> run make
+
+```shell
+$ make
+```
+
+> open new terminal and run make run_client
+
+```shell
+$ make run_client
+```
