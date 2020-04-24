@@ -19,6 +19,7 @@ class HistoryOperations(BaseOperation):
             print(f'rows: {rows}')
 
             mapped_rows = self.mapper.map_orders(rows)
+            print(f'mapped rows: {mapped_rows}')
             return mapped_rows
 
     def add_order_to_history(self, machine_id, receipt_id):
