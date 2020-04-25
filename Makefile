@@ -1,7 +1,10 @@
 .ONESHELL:
 
-all: install run_db run_server run_client
+all: clean_excessive_files install run_db run_server run_client
 .PHONY: all
+
+clean_excessive_files:
+    find . | grep -E "(__pycache__|\.pyc)" | xargs rm -rf
 
 install:
 	echo "Creating virtualenv, installing packages"
