@@ -14,5 +14,4 @@ class MySQLMapper(BaseMapper):
 class SQLiteMapper(BaseMapper):
     @staticmethod
     def map_orders(last_orders):
-        mapped_orders = last_orders
-        return mapped_orders
+        return last_orders
