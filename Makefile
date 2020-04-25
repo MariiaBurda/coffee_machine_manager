@@ -1,11 +1,7 @@
 .ONESHELL:
 
-all: delete_excess_files install run_db run_server run_client
+all: install run_db run_server run_client
 .PHONY: all
-
-delete_excess_files:
-	echo "Deleting excess files"
-    	find . | grep -E "(__pycache__|\.pyc)" | xargs rm -rf
 
 install:
 	echo "Creating virtualenv, installing packages"
@@ -27,5 +23,3 @@ run_client:
 	echo "Running client.py module"
 	. venv/bin/activate
 	python app/client.py
-	
-
