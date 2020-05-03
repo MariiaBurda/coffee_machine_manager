@@ -2,7 +2,6 @@ import mysql.connector
 import sqlite3
 
 from run_db import db_path
-from .config import config_for_db
 
 
 class BaseConnector:
@@ -14,13 +13,14 @@ class BaseConnector:
 
 
 class MySQLConnector(BaseConnector):
-    def __init__(self):
+    def __init__(self, config_for_db):
         BaseConnector.__init__(self)
         self.symbol = '%s'
         self.time = "NOW()"
+        self.config_for_db = config_for_db
 
     def connect(self):
-        self.db = mysql.connector.Connect(**config_for_db)
+        self.db = mysql.connector.Connect(**self.config_for_db)
         self.cursor = self.db.cursor()
 
 
