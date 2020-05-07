@@ -4,7 +4,8 @@ import sys
 import os
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
-from operations.base_mapper import MySQLMapper, SQLiteMapper
+
+from operations.base_mapper import MySQLMapper
 
 
 class TestMySQLMapper(unittest.TestCase):

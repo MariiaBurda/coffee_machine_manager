@@ -1,5 +1,10 @@
 import sqlite3
-from app.database.initialization import db_path
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))))
+
+from run_db import db_path
 
 machine_id = 1
 receipt_id = 2
@@ -34,7 +39,7 @@ def get_receipt_resources_value(db, machine_id, receipt_id):
 
 if __name__ == '__main__':
     receipts_list = get_all_receipts(db_path)
-    print(receipts_list)
+    print(f"receipts list: {receipts_list}")
 
     receipt_resources_value_list = get_receipt_resources_value(db_path, machine_id, receipt_id)
-    print(receipt_resources_value_list)
+    print(f"resources value list for receipt number 2: {receipt_resources_value_list}")

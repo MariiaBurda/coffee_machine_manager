@@ -31,7 +31,3 @@ def sqlite_db_seed(db):
         cursor.execute(data)
 
     conn.commit()
-
-
-if __name__ == "__main__":
-    sqlite_db_seed()

@@ -62,7 +62,3 @@ def sqlite_db_init(db):
 
     for table in tables:
         cursor.execute(table)
-
-
-if __name__ == "__main__":
-    sqlite_db_init()

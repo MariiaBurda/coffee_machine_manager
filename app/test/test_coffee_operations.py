@@ -4,6 +4,7 @@ import sys
 import os
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+
 from operations.coffee_operations import make_coffee
 from operations.machine_operations import MachineOperations
 from operations.receipt_operations import ReceiptOperations
